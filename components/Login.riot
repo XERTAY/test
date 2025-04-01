@@ -1,19 +1,47 @@
 <Login>
-  <form onsubmit={ login }>
-     <label for="email">Adresse mail</label>
-        <input type="email" id="email" name="email" placeholder="Email"  required oninput={ updateField }>
-    <div class="grid">
-        <label for="password">Password
-        <input type="password" id="password" name="password" placeholder="Password" required oninput={ updateField }>
-    </label>
+  <div class="section">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5">
+          <div class="card">
+            <div class="card-content">
+              <form onsubmit={ login }>
+                <div class="field">
+                  <label class="label" for="email">Adresse mail</label>
+                  <div class="control has-icons-left">
+                    <input class="input" type="email" id="email" name="email" placeholder="Email" required oninput={ updateField }>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-envelope"></i>
+                    </span>
+                  </div>
+                </div>
 
+                <div class="field">
+                  <label class="label" for="password">Password</label>
+                  <div class="control has-icons-left">
+                    <input class="input" type="password" id="password" name="password" placeholder="Password" required oninput={ updateField }>
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                  </div>
+                </div>
 
+                <p if={ state.error } class="has-text-danger has-text-weight-bold">{ state.error }</p>
+
+                <div class="field">
+                  <div class="control">
+                    <button type="submit" class="button is-primary is-fullwidth" disabled={ !isFormValid() }>
+                      Se Connecter
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <p if={ state.error } class="error">{ state.error }</p>
-
-    <button type="submit" disabled={ !isFormValid() }>Se Connecter</button>
-  </form>
+  </div>
 
   <script>
     export default {
@@ -32,27 +60,21 @@
         this.update();
       },
 
-
       async login(e) {
         e.preventDefault();
         const { email, password } = this.state;
-
         const user_data = await window.loginUser(email, password);
         const data = await window.getUserData(user_data.uid);
         console.log(user_data.uid);
-
         window.donnee_user.setLoggedIn(true);
         window.donnee_user.setUserData(data);
-        
         this.update();
       }
     };
   </script>
 
   <style>
-    .error {
-      color: red;
-      font-weight: bold;
-    }
+    /* Les styles Bulma gèrent l'aspect de base du formulaire.
+       Vous pouvez ajouter des styles personnalisés ici si besoin. */
   </style>
 </Login>

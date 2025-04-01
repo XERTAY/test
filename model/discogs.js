@@ -2,7 +2,7 @@
 
 const clé = "bfPcZjwMsQkdFSStUvaW"; 
 const clépassecrete = "AuYDddTAbHlGRFsdWZhGfrgwhFCtUVqR";
-const titre_chaud = "damso"
+const titre_chaud = "angele"
 
 export async function searchDiscogs(query, recherchetype) {
     const réponses = await fetch(`https://api.discogs.com/database/search?q=${query}&type=${recherchetype}&key=${clé}&secret=${clépassecrete}`);

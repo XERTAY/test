@@ -1,50 +1,61 @@
 <ItemList>
-  <div>
-    <h5>{props.title}</h5>
-  </div>
+  <div class="container">
+    <div>
+      <h5 class="title is-5">{props.title}</h5>
+    </div>
 
-  <p if={props.nb_res == 1 || props.nb_res == 0}>{props.nb_res} résultat</p>
-  <p if={props.nb_res > 1}>{props.nb_res} résultats </p>
+    <div>
+      <p if={props.nb_res == 1 || props.nb_res == 0}>{props.nb_res} résultat</p>
+      <p if={props.nb_res > 1}>{props.nb_res} résultats</p>
+    </div>
 
-  <div class="result">
-    <div class="grid-container">
-      <div class="grid-item" each={item in props.results}>
-        <article>
-          <div>
-            <header class='short-text'>
-              <a class="fav" if={ app.isLoggedIn } onclick={ () => toggleFavorite(item) }>
-                <i class={ isFavorite(item.id) ? 'fas fa-star favorited' : 'fas fa-star' }></i>
-              </a>
-              <a if={item.type === 'artist'} href={"/artists_info/"+item.id+"/"+encodeURIComponent(item.cover_image)}>
-                <h2 class="title"> {item.title} </h2>
-              </a>
-              <a if={item.type === 'release'} href={"/releases_info/"+item.id}>
-                <h2 class="title"> {item.title} </h2>
-              </a>
-              <a if={item.type === 'master'} href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
-                <h2 class="title"> {item.title} </h2>
-              </a>
-              <a if={item.type === 'label'}>
-                <h2 class="title"> {item.title} </h2>
-              </a>
-            </header>
+    <div class="section result">
+      <div class="columns is-multiline">
+        <div class="column is-one-quarter" each={item in props.results}>
+          <div class="card">
+            <div class="card-content">
+              <header class="short-text">
+                <a class="fav" if={ app.isLoggedIn } onclick={ () => toggleFavorite(item) }>
+                  <i class={ isFavorite(item.id) ? 'fas fa-star favorited' : 'fas fa-star' }></i>
+                </a>
+                <div>
+                  <a if={item.type === 'artist'} href={"/artists_info/"+item.id+"/"+encodeURIComponent(item.cover_image)}>
+                    <h2 class="title is-6">{item.title}</h2>
+                  </a>
+                  <a if={item.type === 'release'} href={"/releases_info/"+item.id}>
+                    <h2 class="title is-6">{item.title}</h2>
+                  </a>
+                  <a if={item.type === 'master'} href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
+                    <h2 class="title is-6">{item.title}</h2>
+                  </a>
+                  <a if={item.type === 'label'}>
+                    <h2 class="title is-6">{item.title}</h2>
+                  </a>
+                </div>
+              </header>
 
-            <img class="image" src={item.cover_image} alt="Cover" />
-            <div if={item.type === 'release'}>
-            <br />
-              <a href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}> Voir son Master</a> 
+              <figure class="image">
+                <img src={item.cover_image} alt="Cover" />
+              </figure>
+
+              <div if={item.type === 'release'}>
+                <br />
+                <a href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
+                  Voir son Master
+                </a> 
+              </div>
+
+              <footer if={item.community} class="short-text">
+                <span class="want">
+                  {item.community.want} <i class="fas fa-check"></i>
+                </span>
+                <span class="have">
+                  {item.community.have} <i class="fas fa-heart"></i>
+                </span>
+              </footer>
             </div>
-
-            <footer if={item.community} class="short-text">
-              <span class="want">
-                {item.community.want} <i class="fas fa-check"></i>
-              </span>
-              <span class="have">
-                {item.community.have} <i class="fas fa-heart"></i>
-              </span>
-            </footer>
           </div>
-        </article>
+        </div>
       </div>
     </div>
   </div>
@@ -72,12 +83,8 @@
         return this.app.favorites.some(fav => fav.item_id === id);
       },
 
-
-
       async toggleFavorite(item) {
-
         if (this.isFavorite(item.id)) {
-
           let fav = this.app.favorites.filter(fav => fav.item_id === item.id);
           fav.forEach(async (elt) => {
             await window.removeFavorite(elt.id);
@@ -85,7 +92,6 @@
         } else {
           await window.addFavorite(item.id, item.type, item.cover_image, item.title);
         }
-
         this.loadFavorites();
       }
     };
@@ -98,10 +104,8 @@
       transition: color 0.3s ease;
       color: blue;
     }
-
     .favorited {
       color: gold !important;
     }
   </style>
 </ItemList>
-

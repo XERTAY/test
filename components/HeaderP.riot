@@ -1,129 +1,113 @@
 <HeaderP>
-
-<nav class="navbar">
-        <div class="logo"><a href={"/~kabbouri/s4_mp_R4.01_R4.A.10"}>Spotif'aïe</a></div>
-        
-        <div style="display: flex; align-items: center;">
-        <select 
-            onchange={updateType}
-            style="
-                height: 60px;
-                padding: 0 15px;
-                border: 1px solid #ccc;
-                border-right: 0;
-                border-radius: 6px 0 0 6px;
-                appearance: none;
-                font-size: 14px;
-                line-height: 1;
-                margin: 0;
-            ">
-            <option>Où </option>
-            <option value="release">Release</option>
-            <option value="artist">Artiste</option>
-            <option value="masters">Master</option>
-        </select>
-
-        <input 
-            oninput={updateQuery}
-            type="text" 
-            placeholder="Q zz top"
-            style="
-                height: 60px;
-                flex-grow: 2;
-                padding-right:85px;
-                border: 1px solid #ccc;
-                border-radius: 0 0 0 0;
-                border-left: 0;
-                border-right: 0;
-                font-size: 14px;
-                line-height: 1;
-                margin: 0;
-                box-shadow: none;
-            ">
-
-        <button 
-            onclick={search}
-            style="
-                height: 60px;
-                padding: 0 20px;
-                border: 1px solid #007bff;
-                border-radius: 0 6px 6px 0;
-                background: #007bff;
-                color: white;
-                font-size: 14px;
-                line-height: 1;
-                margin: 0;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            ">
-            Search
-        </button>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href={"/"}>Dix Heures</a>
+      <!-- Burger menu pour mobile si besoin -->
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
 
-
-        <div class="menu">
-            <a href={"/releases"}>Release</a>
-            <a href={"/artists"}>Artiste</a>
-            <a href={"/signin"} if={!state.isLoggedIn}>S'inscrire</a>
-            <a href={"/login"} class="btn btn-login"if={!state.isLoggedIn}>Se connecter</a>
-            <a href={"/favorites"} class="btn btn-fav" if={state.isLoggedIn }>Mes Favoris</a>
-            <a href={"/Account"} class="btn btn-account" if={state.isLoggedIn }>Mon compte</a>
-            <a href={"/Logout"} class="btn btn-logout" if={ state.isLoggedIn } onclick={ logout } >Deconnexion</a>
+    <div id="navbarBasic" class="navbar-menu">
+      <div class="navbar-start">
+        <div class="navbar-item">
+          <div class="field has-addons">
+            <!-- Sélecteur de type de recherche -->
+            <div class="control">
+              <div class="select">
+                <select onchange={updateType}>
+                  <option>Où</option>
+                  <option value="releases">Release</option>
+                  <option value="artist">Artiste</option>
+                  <option value="masters">Master</option>
+                </select>
+              </div>
+            </div>
+            <!-- Input de recherche -->
+            <div class="control">
+              <input class="input" type="text" placeholder="Angele" oninput={updateQuery}>
+            </div>
+            <!-- Bouton de recherche -->
+            <div class="control">
+              <button class="button is-primary" onclick={search}>
+                Search
+              </button>
+            </div>
+          </div>
         </div>
-    </nav>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a href={"/releases"} class="button is-light">
+              Release
+            </a>
+            <a href={"/artists"} class="button is-light">
+              Artiste
+            </a>
+            <a href={"/signin"} class="button is-info" if={!state.isLoggedIn}>
+              S'inscrire
+            </a>
+            <a href={"/login"} class="button is-primary" if={!state.isLoggedIn}>
+              Se connecter
+            </a>
+            <a href={"/favorites"} class="button is-warning" if={state.isLoggedIn}>
+              Mes Favoris
+            </a>
+            <a href={"/Account"} class="button is-link" if={state.isLoggedIn}>
+              Mon compte
+            </a>
+            <a href={"/Logout"} class="button is-danger" if={state.isLoggedIn} onclick={logout}>
+              Deconnexion
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 
   <script>
     export default {
-        state: {
-            isLoggedIn: window.donnee_user.state.isLoggedIn,
-            query: "",
-            type: "releases"
-        },
+      state: {
+        isLoggedIn: window.donnee_user.state.isLoggedIn,
+        query: "",
+        type: "releases"
+      },
 
-        updateType(event) {
-            this.state.type = event.target.value;
-        },
+      updateType(event) {
+        this.state.type = event.target.value;
+      },
 
-        updateQuery(event) {
-            this.state.query = event.target.value;
-        },
+      updateQuery(event) {
+        this.state.query = event.target.value;
+      },
 
-        onMounted(e) {
-            this.state.isLoggedIn = window.donnee_user.state.isLoggedIn;
-            this.update();
-        },
+      onMounted() {
+        this.state.isLoggedIn = window.donnee_user.state.isLoggedIn;
+        this.update();
+      },
 
-        search(){
-            window.location.href = '/research/'+this.state.query+'/'+this.state.type;
-        },
+      search(){
+        window.location.href = '/research/'+this.state.query+'/'+this.state.type;
+      },
 
-
-
-        async logout() {
-            window.donnee_user.setLoggedIn(false);
-            
-            window.donnee_user.state.user_id = null;
-            window.donnee_user.state.user_pseudo = null;
-            window.donnee_user.state.user_prenom = null;
-            window.donnee_user.state.user_nom = null;
-            
-            localStorage.removeItem("user_id");
-            localStorage.removeItem("user_pseudo");
-            localStorage.removeItem("user_prenom");
-            localStorage.removeItem("user_nom");
-
-            this.state.isLoggedIn = false;
-            this.update(); 
-
-            window.location.href = '/~kabbouri/s4_mp_R4.01_R4.A.10';
-        }
-
+      async logout() {
+        window.donnee_user.setLoggedIn(false);
+        window.donnee_user.state.user_id = null;
+        window.donnee_user.state.user_pseudo = null;
+        window.donnee_user.state.user_prenom = null;
+        window.donnee_user.state.user_nom = null;
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("user_pseudo");
+        localStorage.removeItem("user_prenom");
+        localStorage.removeItem("user_nom");
+        this.state.isLoggedIn = false;
+        this.update();
+        window.location.href = '/~kabbouri/s4_mp_R4.01_R4.A.10';
+      }
     };
-
-
-
   </script>
-
 </HeaderP>
