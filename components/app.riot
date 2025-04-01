@@ -6,39 +6,39 @@
         <route path="/">
             <Home />
         </route>
-        <route path="/login">
+        <route path="/~teissier/login">
             <Login />
         </route>
 
-        <route path="/signin">
+        <route path="/~teissier/signin">
             <SignIn />
         </route>
 
-        <route path="/releases">
+        <route path="/~teissier/releases">
             <Release />
         </route>
 
-        <route path="/artists">
+        <route path="/~teissier/artists">
             <Artiste />
         </route>
 
-        <route path="/masterview/:id/:img_master">
+        <route path="/~teissier/masterview/:id/:img_master">
             <MasterView master_id={route.params.id} img_master={route.params.img_master} ></MasterView>
         </route>
 
-        <route path="/artists_info/:id/:img_artists">
+        <route path="/~teissier/artists_info/:id/:img_artists">
             <Artist_page artists_id={route.params.id} img_artists={route.params.img_artists}></Artist_page>
         </route>
 
-        <route path="/releases_info/:id">
+        <route path="/~teissier/releases_info/:id">
             <Release_page release_id={route.params.id} ></Release_page>
         </route>
 
-        <route path="/research/:query/:type">
+        <route path="/~teissier/research/:query/:type">
             <ResultatSearch query={route.params.query} type={route.params.type} ></ResultatSearch>
         </route>
 
-        <route path="/favorites">
+        <route path="/~teissier/favorites">
             <Fav />
         </route>
 

@@ -127,7 +127,7 @@
         localStorage.setItem("user_prenom", this.state.prenom);
 
         const user = await window.signin(email, password, prenom, nom, pseudo);
-        window.location.href = '/Login';
+        window.location.href = '/~teissier/Login';
        
         this.update();
       }

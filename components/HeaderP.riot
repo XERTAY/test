@@ -1,7 +1,7 @@
 <HeaderP>
   <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href={"/"}>Dix Heures</a>
+      <a class="navbar-item" href={"/~teissier/"}>Dix Heures</a>
       <!-- Burger menu pour mobile si besoin -->
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
         <span aria-hidden="true"></span>
@@ -42,25 +42,25 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
-            <a href={"/releases"} class="button is-light">
+            <a href={"/~teissier/releases"} class="button is-light">
               Release
             </a>
-            <a href={"/artists"} class="button is-light">
+            <a href={"/~teissier/artists"} class="button is-light">
               Artiste
             </a>
-            <a href={"/signin"} class="button is-info" if={!state.isLoggedIn}>
+            <a href={"/~teissier/signin"} class="button is-info" if={!state.isLoggedIn}>
               S'inscrire
             </a>
-            <a href={"/login"} class="button is-primary" if={!state.isLoggedIn}>
+            <a href={"/~teissier/login"} class="button is-primary" if={!state.isLoggedIn}>
               Se connecter
             </a>
-            <a href={"/favorites"} class="button is-warning" if={state.isLoggedIn}>
+            <a href={"/~teissier/favorites"} class="button is-warning" if={state.isLoggedIn}>
               Mes Favoris
             </a>
-            <a href={"/Account"} class="button is-link" if={state.isLoggedIn}>
+            <a href={"/~teissier/Account"} class="button is-link" if={state.isLoggedIn}>
               Mon compte
             </a>
-            <a href={"/Logout"} class="button is-danger" if={state.isLoggedIn} onclick={logout}>
+            <a href={"/~teissier/Logout"} class="button is-danger" if={state.isLoggedIn} onclick={logout}>
               Deconnexion
             </a>
           </div>
@@ -91,7 +91,7 @@
       },
 
       search(){
-        window.location.href = '/research/'+this.state.query+'/'+this.state.type;
+        window.location.href = '/~teissier/research/'+this.state.query+'/'+this.state.type;
       },
 
       async logout() {
@@ -106,7 +106,7 @@
         localStorage.removeItem("user_nom");
         this.state.isLoggedIn = false;
         this.update();
-        window.location.href = '/~kabbouri/s4_mp_R4.01_R4.A.10';
+        window.location.href = '/~teissier/s4_mp_R4.01_R4.A.10';
       }
     };
   </script>

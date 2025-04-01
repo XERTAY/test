@@ -19,13 +19,13 @@
                   <i class={ isFavorite(item.id) ? 'fas fa-star favorited' : 'fas fa-star' }></i>
                 </a>
                 <div>
-                  <a if={item.type === 'artist'} href={"/artists_info/"+item.id+"/"+encodeURIComponent(item.cover_image)}>
+                  <a if={item.type === 'artist'} href={"/~teissier/artists_info/"+item.id+"/"+encodeURIComponent(item.cover_image)}>
                     <h2 class="title is-6">{item.title}</h2>
                   </a>
-                  <a if={item.type === 'release'} href={"/releases_info/"+item.id}>
+                  <a if={item.type === 'release'} href={"/~teissier/releases_info/"+item.id}>
                     <h2 class="title is-6">{item.title}</h2>
                   </a>
-                  <a if={item.type === 'master'} href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
+                  <a if={item.type === 'master'} href={"/~teissier/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
                     <h2 class="title is-6">{item.title}</h2>
                   </a>
                   <a if={item.type === 'label'}>
@@ -40,7 +40,7 @@
 
               <div if={item.type === 'release'}>
                 <br />
-                <a href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
+                <a href={"/~teissier/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
                   Voir son Master
                 </a> 
               </div>
