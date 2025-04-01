@@ -1,0 +1,36 @@
+<ResultatSearch>
+
+    <ItemList 
+        title="Resultat de votre recherche:"
+        results={state.results} 
+        pagination={state.pagination} 
+        type={state.type}
+        nb_res={state.pagination.items}
+    />
+
+
+    <script>
+        export default {
+            props: ["query", "type"],
+
+            state: {
+                results: [],
+                pagination: [],
+                type: ""
+            },
+
+            onMounted() {
+                this.montage()
+            },
+
+            async montage() {
+                const donnees = await window.searchDiscogs(this.props.query, this.props.type)
+                this.state.pagination = donnees.pagination
+                this.state.results = donnees.results
+                this.state.type = this.props.type;
+                this.update()
+            }
+        };
+  </script>
+
+</ResultatSearch>

@@ -1,0 +1,28 @@
+<Release>
+  <ItemList 
+    title="Release"
+    results={state.results} 
+    pagination={state.pagination} 
+    type="releases"
+    nb_res={state.pagination.items}
+  />
+  <script>
+    export default {
+      state: {
+        results: [],
+        pagination: [],
+      },
+
+      onMounted() {
+        this.montage()
+      },
+
+      async montage() {
+        const donnees = await window.dernierTitre()
+        this.state.pagination = donnees.pagination
+        this.state.results = donnees.results
+        this.update()
+      }
+    };
+  </script>
+</Release>

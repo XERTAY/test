@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /~kabbouri/s4_mp_R4.01_R4.A.10/
+
+# Redirige toutes les requêtes inconnues vers index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [QSA,L]

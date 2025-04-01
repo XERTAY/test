@@ -1,0 +1,59 @@
+<Login>
+  <form onsubmit={ login }>
+     <label for="email">Adresse mail</label>
+        <input type="email" id="email" name="email" placeholder="Email"  required oninput={ updateField }>
+    <div class="grid">
+        <label for="password">Password
+        <input type="password" id="password" name="password" placeholder="Password" required oninput={ updateField }>
+    </label>
+
+
+    </div>
+
+    <p if={ state.error } class="error">{ state.error }</p>
+
+    <button type="submit" disabled={ !isFormValid() }>Se Connecter</button>
+  </form>
+
+  <script>
+    export default {
+      state: {
+        email: '',
+        password: '',
+        error: null
+      },
+
+      isFormValid() {
+        return this.state.email && this.state.password;
+      },
+
+      updateField(e) {
+        this.state[e.target.name] = e.target.value;
+        this.update();
+      },
+
+
+      async login(e) {
+        e.preventDefault();
+        const { email, password } = this.state;
+
+        const user_data = await window.loginUser(email, password);
+        const data = await window.getUserData(user_data.uid);
+        console.log(user_data.uid);
+
+        window.donnee_user.setLoggedIn(true);
+        window.donnee_user.setUserData(data);
+        
+        //window.location.href = '/~kabbouri/s4_mp_R4.01_R4.A.10/';
+        this.update();
+      }
+    };
+  </script>
+
+  <style>
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</Login>

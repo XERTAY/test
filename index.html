@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche musicale</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/riot@9.4.5/riot+compiler.min.js"></script>
+    <script src="https://unpkg.com/@riotjs/route@9.2.1/index.umd.js"></script>
+    
+    <script type="module" src="./model/discogs.js"></script>
+    <script type="module" src="./model/firebase.js"></script>
+    <script type="module" src="./model/donnee_user.js"></script>
+    <script type="riot" src="./components/ItemList.riot"></script>
+    <script type="riot" src="./components/Login.riot"></script>
+    <script type="riot" src="./components/SignIn.riot"></script>
+    <script type="riot" src="./components/Artiste.riot"></script>
+    <script type="riot" src="./components/Home.riot"></script>
+    <script type="riot" src="./components/HeaderP.riot"></script>
+    <script type="riot" src="./components/Master.riot"></script>
+    <script type="riot" src="./components/Release.riot"></script>
+    <script type="riot" src="./components/Pagination.riot"></script>
+    <script type="riot" src="./components/MasterView.riot"></script>
+    <script type="riot" src="./components/Artist_page.riot"></script>
+    <script type="riot" src="./components/Release_page.riot"></script>
+    <script type="riot" src="./components/ResultatSearch.riot"></script>
+    <script type="riot" src="./components/Fav.riot"></script>
+
+
+    
+    
+
+    
+    <script type="riot" src="./components/app.riot"></script>
+    <script type="module" src="./main.js"></script>
+</head>
+
+<body> 
+    <app></app> 
+</body>
+</html>

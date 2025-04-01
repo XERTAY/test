@@ -1,0 +1,95 @@
+<Fav>
+  <main class="container">
+    <h1>Mes Favoris</h1>
+
+
+    <div class="favorites-list" if={ state.data.length > 0 }>
+      <div class="grid-container">
+        <div class="grid-item" each={ fav in state.data }>
+          <article>
+
+            <div>
+              <header class="short-text">
+                <h2 class="title">{ fav.item_title }</h2>
+              </header>
+              <img class="image" src={ fav.item_img } alt="Cover" />
+              <button class="remove-btn" onclick={ () => removeFavorites(fav.id) }> ❌ Supprimer </button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <p if={ state.data.length === 0 }>Aucun favori enregistré.</p>
+  </main>
+
+  <script>
+    export default {
+      state: {
+        data: []
+      },
+
+      onMounted() {
+        if(!localStorage.getItem("isLoggedIn")){
+            window.location.href = '/~kabbouri/s4_mp_R4.01_R4.A.10/';
+        }
+        this.loadFavorites();
+      },
+
+      async loadFavorites() {
+        this.state.data = await window.getFavorites();
+        this.update();
+      },
+
+      async removeFavorites(favId) {
+        console.log(favId)
+        await window.removeFavorite(favId);
+        this.state.data = this.state.data.filter(fav => fav.id !== favId);
+        this.update();
+      }
+    };
+  </script>
+
+  <style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .grid-item {
+      background: var(--background-muted);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .image {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+
+    .remove-btn {
+      background: var(--background-muted);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .remove-btn:hover {
+      background: darkred;
+    }
+  </style>
+</Fav>

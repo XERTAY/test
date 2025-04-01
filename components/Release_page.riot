@@ -1,0 +1,151 @@
+<Release_page>
+
+<div if={state.albumData}>
+    <div class="release-container" >
+
+        <div class="album-info-container">
+            <h1>{state.albumData.title}</h1>
+            <p>Année : {state.albumData.year}</p>
+            <p>Genres : {state.albumData.genres ? state.albumData.genres.join(", ") : "Non spécifié"}</p>
+            <p>Styles : {state.albumData.styles ? state.albumData.styles.join(", ") : "Non spécifié"}</p>
+        </div>
+
+        <div class="artists-container">
+            <h3 class="artists ">Artistes</h3>
+            <ul if={state.albumData.artists}>
+                <li each={artist in state.albumData.artists}>
+                    <p>Nom : {artist.name}</p>
+                </li>
+                <div class="release-image-container">
+            <img if={state.albumData.images && state.albumData.images.length > 0} 
+            src={state.albumData.images[0].resource_url} 
+            alt="Cover Image">
+        </div>
+            </ul>
+        </div>
+
+        <div class="tracklist-container">
+            <h3 class="tracklist ">Tracklist</h3>
+            <ul if={state.albumData.tracklist}>
+                <li each={track in state.albumData.tracklist}>
+                    <p>{track.position} - {track.title} - {track.duration} </p>
+                </li>
+            </ul>
+        </div>
+
+        
+        <div class="note-container">
+            <h3 class="note" >Note de l'album</h3>
+            <p if={state.albumData.notes}>{state.albumData.notes}</p>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script>
+export default {
+  props: ["release_id"],
+  
+  state:{
+    albumData: null ,
+  },
+  
+  async onMounted() {
+    const donnees = await window.releasediscogs(this.props.release_id);
+    this.state.albumData = donnees;
+    console.log(this.state.albumData);
+    this.update();
+  },
+};
+</script>
+
+<style>
+.release-container {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: auto;
+  padding: 2rem;
+}
+
+/* Colonne de gauche */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.album-info-container, 
+.note-container {
+  background: var(--card-background-color);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: var(--card-box-shadow);
+}
+
+/* Image centrée */
+.release-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.release-image-container img {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: var(--card-box-shadow);
+}
+
+/* Colonne de droite */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.tracklist-container, 
+.artists-container {
+  background: var(--card-background-color);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: var(--card-box-shadow);
+}
+
+/* Style des listes */
+.tracklist-container ul, 
+.artists-container ul {
+  padding-left: 1rem;
+}
+
+.tracklist-container li, 
+.artists-container li {
+  margin-bottom: 0.5rem;
+  list-style: none;
+}
+
+/* Liens des artistes */
+.artists-container a {
+  text-decoration: none;
+  color: var(--primary);
+}
+
+@media (max-width: 992px) {
+  .release-container {
+    grid-template-columns: 1fr;
+  }
+
+  .left-column, .right-column {
+    width: 100%;
+  }
+
+  .release-image-container {
+    order: -1;
+  }
+}
+
+</style>
+</Release_page>
+

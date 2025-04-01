@@ -1,0 +1,30 @@
+<Home>
+  <ItemList 
+    title="Home - Bienvenue {state.username} !"
+    results={state.results} 
+    pagination={state.pagination} 
+    type="releases"
+    nb_res={state.pagination.items}
+
+  />
+  <script>
+    export default {
+      state: {
+        username: localStorage.getItem("user_pseudo"),
+        results: [],
+        pagination: [],
+      },
+
+      onMounted() {
+        this.base()
+      },
+
+      async base() {
+        const donnees = await window.dernierTitre()
+        this.state.pagination = donnees.pagination
+        this.state.results = donnees.results
+        this.update()
+      }
+    };
+  </script>
+</Home>

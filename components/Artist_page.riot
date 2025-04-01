@@ -1,0 +1,93 @@
+<Artist_page>
+  <div if={state.artistsData !== null}>
+    <div class="artists-container">
+      <div class="artist-info-container">
+        <h2>{state.artistsData.name}</h2>
+        <p>Nom complet : {state.artistsData.realname}</p>
+        <img class="image" src={state.cover_image} alt="Cover" />
+      </div>
+
+      <div class="artist-profile-container">
+        <p>Biographie : {state.artistsData.profile}</p>
+      </div>
+    </div>
+  </div>
+  <div if={state.artistsData === null}>Chargement...</div>
+
+  <script>
+    export default {
+      props:["artists_id", "img_artists"],
+
+      state: {
+        artistsData: null,
+        cover_image: null
+      },
+
+      onMounted() {
+        this.getArtistInfo();
+      },
+
+      async getArtistInfo() {
+        const donnees = await window.artistDiscogs(this.props.artists_id);
+        this.state.cover_image = decodeURIComponent(this.props.img_artists);
+        this.state.artistsData = donnees;
+        this.update(); 
+      }
+    };
+  </script>
+
+  <style>
+  .artists-container {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem;
+  align-items: start;
+}
+
+.artist-info-container {
+  background: var(--card-background-color);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: var(--card-box-shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.artist-info-container h2 {
+  margin-bottom: 0.5rem;
+}
+
+.artist-info-container p {
+  margin-bottom: 1rem;
+}
+
+.image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: var(--card-box-shadow);
+}
+
+.artist-profile-container {
+  background: var(--card-background-color);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: var(--card-box-shadow);
+}
+
+@media (max-width: 992px) {
+  .artists-container {
+    grid-template-columns: 1fr;
+  }
+
+  .artist-info-container, .artist-profile-container {
+    width: 100%;
+  }
+}
+</style>
+</Artist_page>

@@ -1,0 +1,54 @@
+<app>
+    <HeaderP />
+    <br /><br />
+
+    <router >
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10">
+            <Home />
+        </route>
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/login">
+            <Login />
+        </route>
+
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/signin">
+            <SignIn />
+        </route>
+
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/releases">
+            <Release />
+        </route>
+
+        <route path="/artists">
+            <Artiste />
+        </route>
+
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/masterview/:id/:img_master">
+            <MasterView master_id={route.params.id} img_master={route.params.img_master} ></MasterView>
+        </route>
+
+        <route path="/artists_info/:id/:img_artists">
+            <Artist_page artists_id={route.params.id} img_artists={route.params.img_artists}></Artist_page>
+        </route>
+
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/releases_info/:id">
+            <Release_page release_id={route.params.id} ></Release_page>
+        </route>
+
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/research/:query/:type">
+            <ResultatSearch query={route.params.query} type={route.params.type} ></ResultatSearch>
+        </route>
+
+        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/favorites">
+            <Fav />
+        </route>
+
+
+    </router>
+
+    
+
+    
+
+
+
+</app>
