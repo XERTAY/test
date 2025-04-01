@@ -18,10 +18,10 @@
               <a if={item.type === 'artist'} href={"/artists_info/"+item.id+"/"+encodeURIComponent(item.cover_image)}>
                 <h2 class="title"> {item.title} </h2>
               </a>
-              <a if={item.type === 'release'} href={"/~kabbouri/s4_mp_R4.01_R4.A.10/releases_info/"+item.id}>
+              <a if={item.type === 'release'} href={"/releases_info/"+item.id}>
                 <h2 class="title"> {item.title} </h2>
               </a>
-              <a if={item.type === 'master'} href={"/~kabbouri/s4_mp_R4.01_R4.A.10/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
+              <a if={item.type === 'master'} href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}>
                 <h2 class="title"> {item.title} </h2>
               </a>
               <a if={item.type === 'label'}>
@@ -32,7 +32,7 @@
             <img class="image" src={item.cover_image} alt="Cover" />
             <div if={item.type === 'release'}>
             <br />
-              <a href={"/~kabbouri/s4_mp_R4.01_R4.A.10/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}> Voir son Master</a> 
+              <a href={"/masterview/" + item.master_id + "/" + encodeURIComponent(item.cover_image)}> Voir son Master</a> 
             </div>
 
             <footer if={item.community} class="short-text">

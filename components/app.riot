@@ -3,18 +3,18 @@
     <br /><br />
 
     <router >
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10">
+        <route path="/">
             <Home />
         </route>
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/login">
+        <route path="/login">
             <Login />
         </route>
 
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/signin">
+        <route path="/signin">
             <SignIn />
         </route>
 
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/releases">
+        <route path="/releases">
             <Release />
         </route>
 
@@ -22,7 +22,7 @@
             <Artiste />
         </route>
 
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/masterview/:id/:img_master">
+        <route path="/masterview/:id/:img_master">
             <MasterView master_id={route.params.id} img_master={route.params.img_master} ></MasterView>
         </route>
 
@@ -30,15 +30,15 @@
             <Artist_page artists_id={route.params.id} img_artists={route.params.img_artists}></Artist_page>
         </route>
 
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/releases_info/:id">
+        <route path="/releases_info/:id">
             <Release_page release_id={route.params.id} ></Release_page>
         </route>
 
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/research/:query/:type">
+        <route path="/research/:query/:type">
             <ResultatSearch query={route.params.query} type={route.params.type} ></ResultatSearch>
         </route>
 
-        <route path="/~kabbouri/s4_mp_R4.01_R4.A.10/favorites">
+        <route path="/favorites">
             <Fav />
         </route>
 

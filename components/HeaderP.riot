@@ -64,13 +64,13 @@
 
 
         <div class="menu">
-            <a href={"/~kabbouri/s4_mp_R4.01_R4.A.10/releases"}>Release</a>
+            <a href={"/releases"}>Release</a>
             <a href={"/artists"}>Artiste</a>
-            <a href={"/~kabbouri/s4_mp_R4.01_R4.A.10/signin"} if={!state.isLoggedIn}>S'inscrire</a>
-            <a href={"/~kabbouri/s4_mp_R4.01_R4.A.10/login"} class="btn btn-login"if={!state.isLoggedIn}>Se connecter</a>
-            <a href={"/~kabbouri/s4_mp_R4.01_R4.A.10/favorites"} class="btn btn-fav" if={state.isLoggedIn }>Mes Favoris</a>
-            <a href={"/~kabbouri/s4_mp_R4.01_R4.A.10/Account"} class="btn btn-account" if={state.isLoggedIn }>Mon compte</a>
-            <a href={"/~kabbouri/s4_mp_R4.01_R4.A.10/Logout"} class="btn btn-logout" if={ state.isLoggedIn } onclick={ logout } >Deconnexion</a>
+            <a href={"/signin"} if={!state.isLoggedIn}>S'inscrire</a>
+            <a href={"/login"} class="btn btn-login"if={!state.isLoggedIn}>Se connecter</a>
+            <a href={"/favorites"} class="btn btn-fav" if={state.isLoggedIn }>Mes Favoris</a>
+            <a href={"/Account"} class="btn btn-account" if={state.isLoggedIn }>Mon compte</a>
+            <a href={"/Logout"} class="btn btn-logout" if={ state.isLoggedIn } onclick={ logout } >Deconnexion</a>
         </div>
     </nav>
 
@@ -96,7 +96,7 @@
         },
 
         search(){
-            window.location.href = '/~kabbouri/s4_mp_R4.01_R4.A.10/research/'+this.state.query+'/'+this.state.type;
+            window.location.href = '/research/'+this.state.query+'/'+this.state.type;
         },
 
 
