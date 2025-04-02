@@ -6,8 +6,9 @@ const titre_chaud = "angele"
 
 export async function searchDiscogs(query, recherchetype) {
     const réponses = await fetch(`https://api.discogs.com/database/search?q=${query}&type=${recherchetype}&key=${clé}&secret=${clépassecrete}`);
-    return réponses.json(); 
+    return réponses.json();
 }
+
 
 export async function dernierTitre() {
     const réponses = await fetch(`https://api.discogs.com/database/search?q=${titre_chaud}&type=release&key=${clé}&secret=${clépassecrete}`);

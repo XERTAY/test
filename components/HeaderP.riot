@@ -19,7 +19,7 @@
               <div class="select">
                 <select onchange={updateType}>
                   <option>Où</option>
-                  <option value="releases">Release</option>
+                  <option value="release">Release</option>
                   <option value="artist">Artiste</option>
                   <option value="masters">Master</option>
                 </select>
@@ -91,7 +91,7 @@
       },
 
       search(){
-        window.location.href = '/~teissier/research/'+this.state.query+'/'+this.state.type;
+        window.location.href = '/#/~teissier/research/' + this.state.query + '/' + this.state.type;
       },
 
       async logout() {

@@ -24,11 +24,12 @@
             },
 
             async montage() {
-                const donnees = await window.searchDiscogs(this.props.query, this.props.type)
-                this.state.pagination = donnees.pagination
-                this.state.results = donnees.results
+                const donnees = await window.searchDiscogs(this.props.query, this.props.type);
+                console.log("Réponse API dans ResultatSearch :", donnees);
+                this.state.pagination = donnees.pagination;
+                this.state.results = donnees.results;
                 this.state.type = this.props.type;
-                this.update()
+                this.update();
             }
         };
   </script>
