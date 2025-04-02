@@ -1,37 +1,35 @@
 <ResultatSearch>
+  <div if={!state.results.length}>
+    <p>Aucun résultat.</p>
+  </div>
 
-    <ItemList 
-        title="Resultat de votre recherche:"
-        results={state.results} 
-        pagination={state.pagination} 
-        type={state.type}
-        nb_res={state.pagination.items}
-    />
+  <ItemList 
+      title="Résultat de votre recherche:"
+      results={state.results} 
+      pagination={state.pagination} 
+      type={state.type}
+      nb_res={state.pagination.items}
+  />
 
-
-    <script>
-        export default {
-            props: ["query", "type"],
-
-            state: {
-                results: [],
-                pagination: [],
-                type: ""
-            },
-
-            onMounted() {
-                this.montage()
-            },
-
-            async montage() {
-                const donnees = await window.searchDiscogs(this.props.query, this.props.type);
-                console.log("Réponse API dans ResultatSearch :", donnees);
-                this.state.pagination = donnees.pagination;
-                this.state.results = donnees.results;
-                this.state.type = this.props.type;
-                this.update();
-            }
-        };
-  </script>
-
+  <script>
+      export default {
+          props: ["query", "type"],
+          state: {
+              results: [],
+              pagination: [],
+              type: ""
+          },
+          onMounted() {
+              this.montage()
+          },
+          async montage() {
+              const donnees = await window.searchDiscogs(this.props.query, this.props.type);
+              console.log("Réponse API dans ResultatSearch :", donnees);
+              this.state.pagination = donnees.pagination;
+              this.state.results = donnees.results;
+              this.state.type = this.props.type;
+              this.update();
+          }
+      };
+    </script>
 </ResultatSearch>
