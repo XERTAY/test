@@ -1,8 +1,6 @@
 <search>
   <section class="section">
     <div class="container">
-      <h2 class="title is-4">Résultats de la recherche</h2>
-
       <div if={ state.loading }>
         <progress class="progress is-small is-primary" max="100">Chargement…</progress>
       </div>
@@ -11,7 +9,12 @@
         <p class="has-text-grey">Aucun résultat trouvé.</p>
       </div>
 
-      <SearchResults if={!state.loading && state.results.length > 0} results={state.results} />
+      <ItemList
+        if={!state.loading && state.results.length > 0}
+        title={"Résultats (" + state.results.length + ")"}
+        results={state.results}
+        nb_res={state.results.length}
+      />
     </div>
   </section>
 
@@ -24,42 +27,44 @@
 
       onMounted() {
         console.log("🔍 <search> monté !");
-        this.loadResults()
+        this.loadResults();
 
+        // Pour réagir au changement de route
         this._onPopState = () => {
-            console.log("🔁 popstate détecté dans <search>");
-            this.loadResults()
+          console.log("🔁 popstate détecté dans <search>");
+          this.loadResults();
         }
 
-        window.addEventListener('popstate', this._onPopState)
-        },
-
+        window.addEventListener('popstate', this._onPopState);
+      },
 
       async loadResults() {
-        this.state.loading = true
-        this.update()
+        this.state.loading = true;
+        this.update();
 
-        const query = window.latestSearch?.query
-        const type = window.latestSearch?.type
+        const query = window.latestSearch?.query;
+        const type = window.latestSearch?.type;
 
         if (!query || !type) {
-            this.state.results = []
-            this.state.loading = false
-            this.update()
-            return
+          console.warn("Aucune requête ou type de recherche fournis.");
+          this.state.results = [];
+          this.state.loading = false;
+          this.update();
+          return;
         }
 
         try {
-            const data = await window.searchDiscogs(query, type)
-            this.state.results = data.results || []
+          const data = await window.searchDiscogs(query, type);
+          this.state.results = Array.isArray(data.results) ? data.results : [];
+          console.log("✅ Résultats chargés :", this.state.results);
         } catch (e) {
-            console.error("Erreur pendant la recherche :", e)
-            this.state.results = []
+          console.error("❌ Erreur pendant la recherche :", e);
+          this.state.results = [];
         }
 
-        this.state.loading = false
-        this.update()
-        }
+        this.state.loading = false;
+        this.update();
+      }
     }
   </script>
 </search>

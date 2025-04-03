@@ -1,6 +1,6 @@
 const key = "bfPcZjwMsQkdFSStUvaW"; 
 const secret = "AuYDddTAbHlGRFsdWZhGfrgwhFCtUVqR";
-const main_page = "angele"
+const main_page = "Zz top"
 
 export async function searchDiscogs(query, recherchetype) {
     const réponses = await fetch(`https://api.discogs.com/database/search?q=${query}&type=${recherchetype}&key=${key}&secret=${secret}`);

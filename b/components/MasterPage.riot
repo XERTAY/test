@@ -34,25 +34,6 @@
   </section>
 
   <script>
-    export default {
-      state: {
-        master: null,
-        img: null
-      },
-
-      async onMounted() {
-        const data = window.selectedMaster
-        if (!data) return
-
-        this.state.img = data.img
-
-        try {
-          this.state.master = await window.masterdiscogs(data.id)
-          this.update()
-        } catch (e) {
-          console.error("Erreur chargement master :", e)
-        }
-      }
-    }
+    export default window.MasterController;  // Utilisation du contrôleur générique pour MasterPage
   </script>
 </MasterPage>

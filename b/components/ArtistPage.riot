@@ -6,7 +6,7 @@
       <div class="columns">
         <div class="column is-one-third">
           <figure class="image is-square">
-            <img if={ state.img } src={ decodeURIComponent(state.img) } alt="Image artiste">
+            <img if={ state.img } src={ decodeURIComponent(state.img) } alt="Image artiste" />
           </figure>
         </div>
         <div class="column">
@@ -33,25 +33,7 @@
   </section>
 
   <script>
-    export default {
-      state: {
-        artist: null,
-        img: null
-      },
-
-      async onMounted() {
-        const data = window.selectedArtist
-        if (!data) return
-
-        this.state.img = data.img
-
-        try {
-          this.state.artist = await window.artistDiscogs(data.id)
-          this.update()
-        } catch (e) {
-          console.error("Erreur chargement artiste :", e)
-        }
-      }
-    }
+    // Référence le contrôleur globalement, défini dans ArtistController.js
+    export default window.ArtistController;
   </script>
 </ArtistPage>

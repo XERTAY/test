@@ -1,30 +1,26 @@
 <FavoriteCard>
-  <div class="column is-one-quarter">
-    <div class="card">
-      <div class="card-image">
-        <figure class="image is-4by3">
-          <img src={ fav.item_img || "https://via.placeholder.com/150" } alt={ fav.item_title || "Cover" }>
-        </figure>
-      </div>
-
-      <div class="card-content">
-        <p class="title is-6">{ fav.item_title || "Titre inconnu" }</p>
-        <p class="subtitle is-7 has-text-grey">Type : { fav.item_type || "inconnu" }</p>
-      </div>
-
-      <footer class="card-footer">
-        <a class="card-footer-item" onclick={() => navigate(fav)}>Voir</a>
-        <a class="card-footer-item" onclick={() => ondelete(fav.id)}>
-          <i class="fas fa-trash has-text-danger"></i>&nbsp; Supprimer
-        </a>
-      </footer>
+  <div class="card">
+    <div class="card-image">
+      <figure class="image is-4by3">
+        <img src={ fav.item_img || 'https://via.placeholder.com/150' } alt={ fav.item_title || 'Cover' } />
+      </figure>
     </div>
+    <div class="card-content">
+      <p class="title is-6">{ fav.item_title || 'Titre inconnu' }</p>
+      <p class="subtitle is-7 has-text-grey">Type : { fav.item_type || 'inconnu' }</p>
+    </div>
+    <footer class="card-footer">
+      <a class="card-footer-item" onclick={() => navigate(fav)}>Voir</a>
+      <a class="card-footer-item" onclick={() => deleteFavorite(fav.id)}>
+        <i class="fas fa-trash has-text-danger"></i>&nbsp; Supprimer
+      </a>
+    </footer>
   </div>
 
   <script>
     export default {
-      props: ['fav', 'ondelete'],
-
+      props: ['fav', 'navigate', 'deleteFavorite'],
+      
       navigate(fav) {
         if (fav.item_type === 'artist') {
           window.selectedArtist = { id: fav.item_id, img: fav.item_img };

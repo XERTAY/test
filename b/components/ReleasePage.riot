@@ -6,24 +6,14 @@
       <div class="columns">
         <div class="column is-one-third">
           <figure class="image is-square">
-            <img src={ state.release.images?.[0]?.uri } alt="Image release" />
+            <img if={ state.img } src={ decodeURIComponent(state.img) } alt="Release image" />
           </figure>
         </div>
         <div class="column">
           <div class="content">
             <p><strong>Artiste :</strong> { state.release.artists?.[0]?.name }</p>
-            <p><strong>Label :</strong> { state.release.labels?.[0]?.name }</p>
-            <p><strong>Date de sortie :</strong> { state.release.released }</p>
+            <p><strong>Année :</strong> { state.release.year }</p>
             <p><strong>Genre :</strong> { state.release.genres?.join(', ') }</p>
-
-            <div if={ state.release.tracklist?.length }>
-              <strong>Pistes :</strong>
-              <ul>
-                <li each={track in state.release.tracklist}>
-                  { track.position } - { track.title }
-                </li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>
@@ -35,22 +25,6 @@
   </section>
 
   <script>
-    export default {
-      state: {
-        release: null
-      },
-
-      async onMounted() {
-        const data = window.selectedRelease
-        if (!data) return
-
-        try {
-          this.state.release = await window.releasediscogs(data.id)
-          this.update()
-        } catch (e) {
-          console.error("Erreur chargement release :", e)
-        }
-      }
-    }
+    export default window.ReleaseController;  // Utilisation du contrôleur générique pour ReleasePage
   </script>
 </ReleasePage>
