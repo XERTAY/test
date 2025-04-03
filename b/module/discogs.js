@@ -1,25 +1,25 @@
-const clé = "bfPcZjwMsQkdFSStUvaW"; 
-const clépassecrete = "AuYDddTAbHlGRFsdWZhGfrgwhFCtUVqR";
-const titre_chaud = "angele"
+const key = "bfPcZjwMsQkdFSStUvaW"; 
+const secret = "AuYDddTAbHlGRFsdWZhGfrgwhFCtUVqR";
+const main_page = "angele"
 
 export async function searchDiscogs(query, recherchetype) {
-    const réponses = await fetch(`https://api.discogs.com/database/search?q=${query}&type=${recherchetype}&key=${clé}&secret=${clépassecrete}`);
+    const réponses = await fetch(`https://api.discogs.com/database/search?q=${query}&type=${recherchetype}&key=${key}&secret=${secret}`);
     return réponses.json();
 }
 
 export async function dernierTitre(page = 1) {
-    const réponses = await fetch(`https://api.discogs.com/database/search?q=${titre_chaud}&type=release&page=${page}&key=${clé}&secret=${clépassecrete}`);
+    const réponses = await fetch(`https://api.discogs.com/database/search?q=${main_page}&type=release&page=${page}&key=${key}&secret=${secret}`);
     return réponses.json(); 
 }
 
 
 export async function dernierArtiste() {
-    const réponses = await fetch(`https://api.discogs.com/database/search?q=&type=artists&key=${clé}&secret=${clépassecrete}`);
+    const réponses = await fetch(`https://api.discogs.com/database/search?q=&type=artists&key=${key}&secret=${secret}`);
     return réponses.json(); 
 }
 
 export async function dernierMasters() {
-    const réponses = await fetch(`https://api.discogs.com/database/search?q=&type=masters&key=${clé}&secret=${clépassecrete}`);
+    const réponses = await fetch(`https://api.discogs.com/database/search?q=&type=masters&key=${key}&secret=${secret}`);
     return réponses.json(); 
 }
 

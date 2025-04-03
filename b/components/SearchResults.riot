@@ -1,87 +1,64 @@
 <SearchResults>
   <div class="section">
-    <div class="columns is-multiline">
-      <div class="column is-one-quarter" each={item in props.results}>
-        <div class="card">
-          <div class="card-image">
-            <figure class="image is-4by3">
-              <img src={item.cover_image || 'https://via.placeholder.com/150'} alt="Cover" />
-            </figure>
-          </div>
+    <div class="container">
+      <h2 class="title is-4">Résultats de la recherche</h2>
 
-          <div class="card-content">
-            <p class="title is-6">{ item.title }</p>
-            <p class="subtitle is-7 has-text-grey">
-              Type : { item.type || 'inconnu' }
-            </p>
-          </div>
-
-          <footer class="card-footer">
-            <a class="card-footer-item" onclick={() => toggleFavorite(item)}>
-              <i class={ isFavorite(item.id) ? 'fas fa-star has-text-warning' : 'far fa-star' }></i>
-              &nbsp; Favori
-            </a>
-          </footer>
-        </div>
+      <div if={ state.loading }>
+        <progress class="progress is-small is-primary" max="100">Chargement…</progress>
       </div>
+
+      <div if={!state.loading && state.results.length === 0}>
+        <p class="has-text-grey">Aucun résultat trouvé.</p>
+      </div>
+
+      <ItemList if={!state.loading && state.results.length > 0} 
+        results={state.results}
+        title={"Résultats (" + state.results.length + ")"}
+      />
     </div>
   </div>
 
   <script>
     export default {
-      props: ['results'],
-
-      app: {
-        isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
-        favorites: []
+      state: {
+        results: [],
+        loading: true
       },
 
-      async onMounted() {
-        if (this.app.isLoggedIn && window.getFavorites) {
-          this.loadFavorites();
+      onMounted() {
+        this.loadResults()
+
+        this._onPopState = () => {
+          this.loadResults()
         }
+        window.addEventListener('popstate', this._onPopState)
       },
 
-      async loadFavorites() {
-        this.app.favorites = await window.getFavorites();
-        this.update();
-      },
+      async loadResults() {
+        this.state.loading = true
+        this.update()
 
-      isFavorite(id) {
-        return this.app.favorites?.some(f => f.item_id === id);
-      },
+        const query = window.latestSearch?.query
+        const type = window.latestSearch?.type
 
-      async toggleFavorite(item) {
-        if (!this.app.isLoggedIn) {
-          alert("Connectez-vous pour ajouter un favori.");
-          return;
-        }
-
-        const existing = this.app.favorites.find(f => f.item_id === item.id);
-
-        if (existing && window.removeFavorite) {
-          await window.removeFavorite(existing.id);
-        } else if (window.addFavorite) {
-          await window.addFavorite(item.id, item.type, item.cover_image, item.title);
+        if (!query || !type) {
+          this.state.results = []
+          this.state.loading = false
+          this.update()
+          return
         }
 
-        this.loadFavorites();
-        if (window.updateFavoriteCount) window.updateFavoriteCount();
+        try {
+          const data = await window.searchDiscogs(query, type)
+          this.state.results = data.results || []
+        } catch (e) {
+          console.error("Erreur pendant la recherche :", e)
+          this.state.results = []
+        }
+
+        this.state.loading = false
+        this.update()
       }
     }
   </script>
-
-  <style scoped>
-    .card {
-      height: 100%;
-    }
-
-    .card-image img {
-      object-fit: cover;
-    }
-
-    .card-footer-item {
-      cursor: pointer;
-    }
-  </style>
 </SearchResults>

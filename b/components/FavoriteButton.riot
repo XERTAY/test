@@ -1,0 +1,63 @@
+<FavoriteButton>
+  <a class="card-footer-item" if={ state.loggedIn } onclick={ toggle }>
+    <i class={ isFavorite ? 'fas fa-star has-text-warning' : 'far fa-star' }></i>
+    &nbsp; Favori
+  </a>
+
+  <script>
+    export default {
+      props: ['itemId', 'itemType', 'itemImg', 'itemTitle'],
+
+      state: {
+        loggedIn: localStorage.getItem("isLoggedIn") === "true",
+        isFavorite: false,
+        favDocId: null
+      },
+
+      async onMounted() {
+        if (this.state.loggedIn && window.getFavorites) {
+          const favs = await window.getFavorites()
+          const fav = favs.find(f => f.item_id === this.props.itemId)
+
+          if (fav) {
+            this.state.isFavorite = true
+            this.state.favDocId = fav.id
+          }
+          this.update()
+        }
+      },
+
+      async toggle() {
+        if (!this.state.loggedIn) {
+          alert("Vous devez être connecté !");
+          return;
+        }
+
+        try {
+          if (this.state.isFavorite && this.state.favDocId) {
+            await window.removeFavorite(this.state.favDocId)
+            alert("❌ Retiré des favoris")
+            this.state.isFavorite = false
+            this.state.favDocId = null
+          } else {
+            const added = await window.addFavorite(
+              this.props.itemId,
+              this.props.itemType,
+              this.props.itemImg,
+              this.props.itemTitle
+            )
+            alert("⭐ Ajouté aux favoris !")
+            this.state.isFavorite = true
+            this.state.favDocId = added.id
+          }
+
+          this.update()
+          if (window.updateFavoriteCount) await window.updateFavoriteCount()
+        } catch (e) {
+          console.error("Erreur favori :", e)
+          alert("Erreur traitement favori")
+        }
+      }
+    }
+  </script>
+</FavoriteButton>

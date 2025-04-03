@@ -2,9 +2,8 @@
   <section class="section">
     <div class="container">
       <ItemList 
-        title={"Home - Bienvenue " + state.username + " !"}
+        title={"Bienvenue " + state.username + " !"}
         results={state.results} 
-        nb_res={state.pagination.items}
       />
 
       <nav class="pagination is-centered mt-5" role="navigation" aria-label="pagination" if={state.pagination.pages > 1}>

@@ -1,60 +1,31 @@
 <ItemList>
-  <div class="container">
-    <div>
-      <h5 class="title is-5">{props.title}</h5>
-    </div>
+  <div class="section">
+    <h2 class="title is-4" if={ props.title }>{ props.title }</h2>
+    <p if={ props.results?.length === 0 } class="has-text-grey">Aucun résultat trouvé.</p>
 
-    <div>
-      <p if={props.nb_res == 1 || props.nb_res == 0}>{props.nb_res} résultat</p>
-      <p if={props.nb_res > 1}>{props.nb_res} résultats</p>
-    </div>
-
-    <div class="section result">
-      <div class="columns is-multiline">
-        <div class="column is-one-quarter" each={item in props.results}>
-          <div class="card">
-            <div class="card-content">
-              <header class="short-text">
-                <a class="fav" onclick={ () => toggleFavorite(item) }>
-                  <i class={ isFavorite(item.id) ? 'fas fa-star favorited' : 'fas fa-star' }></i>
-                </a>
-                <div>
-                  <a if={item.type === 'artist'} onclick={() => goToArtist(item)}>
-                    <h2 class="title is-6">{item.title}</h2>
-                  </a>
-                  <a if={item.type === 'release'} onclick={() => goToRelease(item)}>
-                    <h2 class="title is-6">{item.title}</h2>
-                  </a>
-                  <a if={item.type === 'master'} onclick={() => goToMaster(item)}>
-                    <h2 class="title is-6">{item.title}</h2>
-                  </a>
-                  <a if={item.type === 'label'}>
-                    <h2 class="title is-6">{item.title}</h2>
-                  </a>
-                </div>
-              </header>
-
-              <figure class="image">
-                <img src={item.cover_image} alt="Cover" />
-              </figure>
-
-              <div if={item.type === 'release' && item.master_id}>
-                <br />
-                <a onclick={() => goToMaster(item)}>
-                  Voir son Master
-                </a>
-              </div>
-
-              <footer if={item.community} class="short-text">
-                <span class="want">
-                  {item.community.want} <i class="fas fa-check"></i>
-                </span>
-                <span class="have">
-                  {item.community.have} <i class="fas fa-heart"></i>
-                </span>
-              </footer>
-            </div>
+    <div class="columns is-multiline">
+      <div class="column is-one-quarter" each={item in props.results}>
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img src={item.cover_image || 'https://via.placeholder.com/150'} alt="Cover" />
+            </figure>
           </div>
+
+          <div class="card-content">
+            <p class="title is-6">{ item.title }</p>
+            <p class="subtitle is-7 has-text-grey">Type : { item.type || 'inconnu' }</p>
+          </div>
+
+          <footer class="card-footer">
+            <a class="card-footer-item" onclick={() => navigateToItem(item)}>Voir</a>
+            <FavoriteButton class="card-footer-item"
+              itemId={ item.id }
+              itemType={ item.type }
+              itemImg={ item.cover_image }
+              itemTitle={ item.title }
+            />
+          </footer>
         </div>
       </div>
     </div>
@@ -62,90 +33,21 @@
 
   <script>
     export default {
-      props: ['title', 'results', 'nb_res'],
+      props: ['results', 'title'],
 
-      app: {
-        isLoggedIn: false,
-        favorites: []
-      },
-
-      onMounted() {
-        this.app.isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-        if (this.app.isLoggedIn) {
-          this.loadFavorites();
+      navigateToItem(item) {
+        if (item.type === 'artist') {
+          window.selectedArtist = { id: item.id, img: item.cover_image };
+          window.history.pushState(null, '', '/artist');
+        } else if (item.type === 'release') {
+          window.selectedRelease = { id: item.id };
+          window.history.pushState(null, '', '/release');
+        } else if (item.type === 'master') {
+          window.selectedMaster = { id: item.master_id || item.id, img: item.cover_image };
+          window.history.pushState(null, '', '/masterpage');
         }
-      },
-
-      async loadFavorites() {
-        this.app.favorites = await window.getFavorites();
-        this.update();
-      },
-
-      isFavorite(id) {
-        return this.app.favorites.some(fav => fav.item_id === id);
-      },
-
-      async toggleFavorite(item) {
-        if (!this.app.isLoggedIn) {
-            alert("Connectez-vous pour ajouter un favori.");
-            return;
-        }
-
-        const existing = this.app.favorites.find(f => f.item_id === item.id);
-
-        if (existing && window.removeFavorite) {
-            await window.removeFavorite(existing.id);
-            alert("Favori retiré.");
-        } else if (window.addFavorite) {
-            await window.addFavorite(item.id, item.type, item.cover_image, item.title);
-            alert("Ajouté aux favoris !");
-        }
-
-        await this.loadFavorites();
-
-        // MAJ du compteur global si défini
-        if (window.updateFavoriteCount) window.updateFavoriteCount();
-
-        this.update(); // 👈 assure le rafraîchissement visuel
-        },
-
-      goToArtist(item) {
-        window.selectedArtist = {
-          id: item.id,
-          img: item.cover_image
-        };
-        window.history.pushState(null, "", "/artist");
-        window.dispatchEvent(new PopStateEvent("popstate"));
-      },
-
-      goToRelease(item) {
-        window.selectedRelease = {
-          id: item.id
-        };
-        window.history.pushState(null, "", "/release");
-        window.dispatchEvent(new PopStateEvent("popstate"));
-      },
-
-      goToMaster(item) {
-        window.selectedMaster = {
-          id: item.master_id || item.id,
-          img: item.cover_image
-        };
-        window.history.pushState(null, "", "/masterview");
-        window.dispatchEvent(new PopStateEvent("popstate"));
+        window.dispatchEvent(new PopStateEvent('popstate'));
       }
-    };
+    }
   </script>
-
-  <style scoped>
-    .fav i {
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: color 0.3s ease;
-      color: blue;
-    }
-    .favorited {
-      color: gold !important;
-    }
-  </style>
 </ItemList>

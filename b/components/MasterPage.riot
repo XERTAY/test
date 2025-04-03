@@ -1,0 +1,58 @@
+<MasterPage>
+  <section class="section">
+    <div class="container" if={ state.master }>
+      <h2 class="title is-3">{ state.master.title }</h2>
+
+      <div class="columns">
+        <div class="column is-one-third">
+          <figure class="image is-square">
+            <img if={ state.img } src={ decodeURIComponent(state.img) } alt="Master image" />
+          </figure>
+        </div>
+        <div class="column">
+          <div class="content">
+            <p><strong>Artiste :</strong> { state.master.artists?.[0]?.name }</p>
+            <p><strong>Année :</strong> { state.master.year }</p>
+            <p><strong>Genre :</strong> { state.master.genres?.join(', ') }</p>
+
+            <div if={ state.master.tracklist?.length }>
+              <strong>Tracklist :</strong>
+              <ul>
+                <li each={track in state.master.tracklist}>
+                  { track.position } - { track.title }
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div if={!state.master}>
+      <p class="has-text-grey">Chargement du master...</p>
+    </div>
+  </section>
+
+  <script>
+    export default {
+      state: {
+        master: null,
+        img: null
+      },
+
+      async onMounted() {
+        const data = window.selectedMaster
+        if (!data) return
+
+        this.state.img = data.img
+
+        try {
+          this.state.master = await window.masterdiscogs(data.id)
+          this.update()
+        } catch (e) {
+          console.error("Erreur chargement master :", e)
+        }
+      }
+    }
+  </script>
+</MasterPage>

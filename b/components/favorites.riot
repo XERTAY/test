@@ -3,32 +3,87 @@
     <div class="container">
       <h2 class="title is-4">Vos favoris</h2>
 
-      <div if={!state.isLoggedIn}>
-        <p class="has-text-grey">Veuillez vous connecter pour accéder à vos favoris.</p>
+      <div if={state.favorites.length === 0} class="has-text-grey">
+        Aucun favori enregistré.
       </div>
 
-      <div if={state.isLoggedIn && state.favorites.length === 0}>
-        <p class="has-text-grey">Aucun favori pour le moment.</p>
+      <div if={state.grouped.releases.length}>
+        <h3 class="title is-5 mt-5">Releases</h3>
+        <div class="columns is-multiline">
+          <div class="column is-one-quarter" each={fav in state.grouped.releases}>
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-4by3">
+                  <img src={ fav.item_img || 'https://via.placeholder.com/150' } alt={ fav.item_title || 'Cover' }>
+                </figure>
+              </div>
+
+              <div class="card-content">
+                <p class="title is-6">{ fav.item_title || "Titre inconnu" }</p>
+                <p class="subtitle is-7 has-text-grey">Type : { fav.item_type || "inconnu" }</p>
+              </div>
+
+              <footer class="card-footer">
+                <a class="card-footer-item" onclick={() => navigate(fav)}>Voir</a>
+                <a class="card-footer-item" onclick={() => deleteFavorite(fav.id)}>
+                  <i class="fas fa-trash has-text-danger"></i>&nbsp; Supprimer
+                </a>
+              </footer>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div if={state.isLoggedIn && state.favorites.length > 0} class="columns is-multiline">
-        <div class="column is-one-quarter" each={fav in state.favorites}>
-          <div class="card">
-            <div class="card-image">
-              <figure class="image is-4by3">
-                <img src={fav.item_img || 'https://via.placeholder.com/150'} alt="Cover" />
-              </figure>
-            </div>
-            <div class="card-content">
-              <p class="title is-6">{fav.item_title}</p>
-              <p class="subtitle is-7 has-text-grey">Type : {fav.item_type}</p>
-            </div>
+      <div if={state.grouped.artists.length}>
+        <h3 class="title is-5 mt-5">Artistes</h3>
+        <div class="columns is-multiline">
+          <div class="column is-one-quarter" each={fav in state.grouped.artists}>
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-4by3">
+                  <img src={ fav.item_img || 'https://via.placeholder.com/150' } alt={ fav.item_title || 'Cover' }>
+                </figure>
+              </div>
 
-            <footer class="card-footer">
-              <a class="card-footer-item" onclick={() => remove(fav)}>
-                <i class="fas fa-trash"></i>&nbsp; Supprimer
-              </a>
-            </footer>
+              <div class="card-content">
+                <p class="title is-6">{ fav.item_title || "Titre inconnu" }</p>
+                <p class="subtitle is-7 has-text-grey">Type : { fav.item_type || "inconnu" }</p>
+              </div>
+
+              <footer class="card-footer">
+                <a class="card-footer-item" onclick={() => navigate(fav)}>Voir</a>
+                <a class="card-footer-item" onclick={() => deleteFavorite(fav.id)}>
+                  <i class="fas fa-trash has-text-danger"></i>&nbsp; Supprimer
+                </a>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div if={state.grouped.masters.length}>
+        <h3 class="title is-5 mt-5">Masters</h3>
+        <div class="columns is-multiline">
+          <div class="column is-one-quarter" each={fav in state.grouped.masters}>
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-4by3">
+                  <img src={ fav.item_img || 'https://via.placeholder.com/150' } alt={ fav.item_title || 'Cover' }>
+                </figure>
+              </div>
+
+              <div class="card-content">
+                <p class="title is-6">{ fav.item_title || "Titre inconnu" }</p>
+                <p class="subtitle is-7 has-text-grey">Type : { fav.item_type || "inconnu" }</p>
+              </div>
+
+              <footer class="card-footer">
+                <a class="card-footer-item" onclick={() => navigate(fav)}>Voir</a>
+                <a class="card-footer-item" onclick={() => deleteFavorite(fav.id)}>
+                  <i class="fas fa-trash has-text-danger"></i>&nbsp; Supprimer
+                </a>
+              </footer>
+            </div>
           </div>
         </div>
       </div>
@@ -38,38 +93,87 @@
   <script>
     export default {
       state: {
-        isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
-        favorites: []
+        favorites: [],
+        grouped: {
+          releases: [],
+          artists: [],
+          masters: []
+        }
       },
 
       async onMounted() {
-        if (this.state.isLoggedIn && window.getFavorites) {
-          this.loadFavorites();
-        }
+        console.log("🔄 <favorites> monté, chargement des favoris…");
+        await this.loadFavorites();
       },
 
       async loadFavorites() {
+        console.log("📡 Appel à window.getFavorites()");
         try {
-          this.state.favorites = await window.getFavorites();
-          this.update();
+          const favs = await window.getFavorites();
+          console.log("✅ Favoris récupérés : ", favs);
 
-          if (window.updateFavoriteCount) {
-            window.updateFavoriteCount();
-          }
+          this.state.favorites = favs;
+          this.groupFavorites();
+          this.update();
         } catch (e) {
-          console.warn("Erreur chargement favoris :", e);
+          console.error("❌ Erreur chargement favoris :", e);
         }
       },
 
-      async remove(fav) {
-        if (!confirm("Retirer ce favori ?")) return;
+      groupFavorites() {
+        const grouped = {
+          releases: [],
+          artists: [],
+          masters: []
+        };
 
-        if (window.removeFavorite) {
-          await window.removeFavorite(fav.id);
+        this.state.favorites.forEach(fav => {
+          if (fav.item_type === 'release') grouped.releases.push(fav);
+          else if (fav.item_type === 'artist') grouped.artists.push(fav);
+          else if (fav.item_type === 'master') grouped.masters.push(fav);
+        });
+
+        this.state.grouped = grouped;
+      },
+
+      async deleteFavorite(id) {
+        try {
+          await window.removeFavorite(id);
+          console.log("🗑️ Favori supprimé :", id);
+          await this.loadFavorites();
+          if (window.updateFavoriteCount) window.updateFavoriteCount();
+        } catch (e) {
+          console.error("Erreur suppression favori :", e);
         }
+      },
 
-        await this.loadFavorites();
+      navigate(fav) {
+        if (fav.item_type === 'artist') {
+          window.selectedArtist = { id: fav.item_id, img: fav.item_img };
+          window.history.pushState(null, '', '/artist');
+        } else if (fav.item_type === 'release') {
+          window.selectedRelease = { id: fav.item_id };
+          window.history.pushState(null, '', '/release');
+        } else if (fav.item_type === 'master') {
+          window.selectedMaster = { id: fav.item_id, img: fav.item_img };
+          window.history.pushState(null, '', '/masterpage');
+        }
+        window.dispatchEvent(new PopStateEvent('popstate'));
       }
     }
   </script>
+
+  <style scoped>
+    .card {
+      height: 100%;
+    }
+
+    .card-image img {
+      object-fit: cover;
+    }
+
+    .card-footer-item {
+      cursor: pointer;
+    }
+  </style>
 </favorites>
