@@ -1,0 +1,68 @@
+<Pagination>
+  <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    <a class="pagination-previous" onclick={prevPage} disabled={props.currentPage === 1}>Précédent</a>
+    <a class="pagination-next" onclick={nextPage} disabled={props.currentPage === totalPages}>Suivant</a>
+    <ul class="pagination-list">
+      <li each={page in visiblePages}>
+        <a class="pagination-link {page === props.currentPage ? 'is-current' : ''}" onclick={() => changePage(page)}>
+          {page}
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <script>
+    export default {
+      props: {
+        currentPage: 1,
+        totalPages: 1,
+        onPageChange: null
+      },
+
+      get visiblePages() {
+        const pages = [];
+        const maxVisible = 5;
+        let startPage = Math.max(1, this.props.currentPage - Math.floor(maxVisible / 2));
+        let endPage = startPage + maxVisible - 1;
+
+        if (endPage > this.props.totalPages) {
+          endPage = this.props.totalPages;
+          startPage = Math.max(1, endPage - maxVisible + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+          pages.push(i);
+        }
+        return pages;
+      },
+
+      changePage(page) {
+        if (page !== this.props.currentPage && this.props.onPageChange) {
+          this.props.onPageChange(page);
+        }
+      },
+
+      prevPage() {
+        if (this.props.currentPage > 1) {
+          this.changePage(this.props.currentPage - 1);
+        }
+      },
+
+      nextPage() {
+        if (this.props.currentPage < this.props.totalPages) {
+          this.changePage(this.props.currentPage + 1);
+        }
+      }
+    };
+  </script>
+
+  <style scoped>
+    .pagination {
+      margin-top: 1rem;
+    }
+    .pagination-link.is-current {
+      background-color: #3273dc;
+      color: #fff;
+    }
+  </style>
+</Pagination>

@@ -1,0 +1,18 @@
+<logout>
+  <script>
+    export default {
+      async onMounted() {
+        localStorage.clear();
+        alert("Vous avez été déconnecté.");
+        window.history.pushState(null, "", "/");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      }
+    };
+  </script>
+
+  <section class="section">
+    <div class="container has-text-centered">
+      <p>Déconnexion en cours...</p>
+    </div>
+  </section>
+</logout>

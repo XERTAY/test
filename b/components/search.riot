@@ -1,0 +1,65 @@
+<search>
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-4">Résultats de la recherche</h2>
+
+      <div if={ state.loading }>
+        <progress class="progress is-small is-primary" max="100">Chargement…</progress>
+      </div>
+
+      <div if={!state.loading && state.results.length === 0}>
+        <p class="has-text-grey">Aucun résultat trouvé.</p>
+      </div>
+
+      <SearchResults if={!state.loading && state.results.length > 0} results={state.results} />
+    </div>
+  </section>
+
+  <script>
+    export default {
+      state: {
+        results: [],
+        loading: true
+      },
+
+      onMounted() {
+        console.log("🔍 <search> monté !");
+        this.loadResults()
+
+        this._onPopState = () => {
+            console.log("🔁 popstate détecté dans <search>");
+            this.loadResults()
+        }
+
+        window.addEventListener('popstate', this._onPopState)
+        },
+
+
+      async loadResults() {
+        this.state.loading = true
+        this.update()
+
+        const query = window.latestSearch?.query
+        const type = window.latestSearch?.type
+
+        if (!query || !type) {
+            this.state.results = []
+            this.state.loading = false
+            this.update()
+            return
+        }
+
+        try {
+            const data = await window.searchDiscogs(query, type)
+            this.state.results = data.results || []
+        } catch (e) {
+            console.error("Erreur pendant la recherche :", e)
+            this.state.results = []
+        }
+
+        this.state.loading = false
+        this.update()
+        }
+    }
+  </script>
+</search>

@@ -1,0 +1,49 @@
+<login>
+  <section class="section">
+    <div class="container">
+      <h2 class="title">Connexion</h2>
+      <form onsubmit={ login }>
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control">
+            <input class="input" type="email" name="email" placeholder="Votre email" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Mot de passe</label>
+          <div class="control">
+            <input class="input" type="password" name="password" placeholder="Votre mot de passe" required>
+          </div>
+        </div>
+        <div class="control">
+          <button class="button is-link" type="submit">Se connecter</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    this.login = async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value;
+      const password = form.password.value;
+      try {
+        const user = await window.loginUser(email, password);
+        localStorage.setItem("user_id", user.uid);
+        localStorage.setItem("isLoggedIn", "true");
+
+        const infos = await window.getUserData(user.uid);
+        if (infos.length > 0) {
+          localStorage.setItem("user_pseudo", infos[0].pseudo || "Inconnu");
+        }
+
+        alert("Connexion réussie");
+        window.history.pushState(null, "", "/");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      } catch (error) {
+        alert("Erreur de connexion : " + error.message);
+      }
+    };
+  </script>
+</login>

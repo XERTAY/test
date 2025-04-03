@@ -1,0 +1,45 @@
+<app>
+  <nav-menu></nav-menu>
+  <br /><br />
+  <router base="/">
+    <route path="/home">
+      <home></home>
+    </route>
+    <route path="/search">
+      <search></search>
+    </route>
+    <route path="/favorites">
+      <favorites></favorites>
+    </route>
+    <route path="/login">
+      <login></login>
+    </route>
+    <route path="/register">
+      <register></register>
+    </route>
+
+    <route path="/masterview">
+        <MasterView></MasterView>
+    </route>
+
+    <route path="/artist">
+        <Artist_page></Artist_page>
+    </route>
+
+    <route path="/release">
+        <Release_page></Release_page>
+    </route>
+
+    <route path="/logout">
+        <logout></logout>
+    </route>
+
+
+
+
+    <!-- Route par défaut -->
+    <route path="/">
+      <home></home>
+    </route>
+  </router>
+</app>

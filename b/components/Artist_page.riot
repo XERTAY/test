@@ -1,0 +1,57 @@
+<Artist_page>
+  <section class="section">
+    <div class="container" if={ state.artist }>
+      <h2 class="title is-3">{ state.artist.name }</h2>
+
+      <div class="columns">
+        <div class="column is-one-third">
+          <figure class="image is-square">
+            <img if={ state.img } src={ decodeURIComponent(state.img) } alt="Image artiste">
+          </figure>
+        </div>
+        <div class="column">
+          <div class="content">
+            <p><strong>Réalisation(s)</strong> : { state.artist.releases_url }</p>
+            <p><strong>Profil :</strong> <br>{ state.artist.profile }</p>
+
+            <div if={ state.artist.urls?.length }>
+              <strong>Liens :</strong>
+              <ul>
+                <li each={url in state.artist.urls}>
+                  <a href={url} target="_blank">{url}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div if={!state.artist}>
+      <p class="has-text-grey">Chargement des données artiste...</p>
+    </div>
+  </section>
+
+  <script>
+    export default {
+      state: {
+        artist: null,
+        img: null
+      },
+
+      async onMounted() {
+        const data = window.selectedArtist
+        if (!data) return
+
+        this.state.img = data.img
+
+        try {
+          this.state.artist = await window.artistDiscogs(data.id)
+          this.update()
+        } catch (e) {
+          console.error("Erreur chargement artiste :", e)
+        }
+      }
+    }
+  </script>
+</Artist_page>

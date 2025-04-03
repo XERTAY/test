@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <base href="./">
+    <meta charset="UTF-8">
+    <title>Application Discogs</title>
+
+    <!-- CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- RiotJS & Routing -->
+    <script src="https://unpkg.com/riot@9.4.5/riot+compiler.min.js"></script>
+    <script src="https://unpkg.com/@riotjs/route@9.2.1/index.umd.js"></script>
+
+    <!-- Modules -->
+    <script type="module" src="./module/discogs.js"></script>
+    <script type="module" src="./module/firebase.js"></script>
+
+    <!-- Composants Riot -->
+    <script type="riot" src="./components/nav-menu.riot"></script>
+    <script type="riot" src="./components/search.riot"></script>
+    <script type="riot" src="./components/SearchResults.riot"></script>
+    <script type="riot" src="./components/Artist_page.riot"></script>
+    <script type="riot" src="./components/Release_page.riot"></script>
+    <script type="riot" src="./components/MasterView.riot"></script>
+    <script type="riot" src="./components/favorites.riot"></script>
+    <script type="riot" src="./components/login.riot"></script>
+    <script type="riot" src="./components/register.riot"></script>
+    <script type="riot" src="./components/ItemList.riot"></script>
+    <script type="riot" src="./components/Home.riot"></script>
+    <script type="riot" src="./components/app.riot"></script>
+    <script type="riot" src="./components/logout.riot"></script>
+
+    <!-- Démarrage -->
+    <script type="module" src="./main.js"></script>
+  </head>
+  <body>
+    <!-- Composant racine -->
+    <app></app>
+  </body>
+</html>

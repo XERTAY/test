@@ -1,0 +1,123 @@
+<nav-menu>
+  <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <strong>Dix Heures</strong>
+      </a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" onclick={ toggleBurger }>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="navbar-menu" class:is-active={ burgerActive }>
+      <div class="navbar-start">
+        <form class="navbar-item" onsubmit={ handleSearch }>
+          <div class="field has-addons">
+            <div class="control">
+              <div class="select">
+                <select name="searchType">
+                  <option value="release">Release</option>
+                  <option value="artist">Artist</option>
+                  <option value="master">Master</option>
+                </select>
+              </div>
+            </div>
+            <div class="control">
+              <input class="input" type="text" name="searchQuery" placeholder="ZZ Top" required>
+            </div>
+            <div class="control">
+              <button class="button is-info" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="navbar-end">
+        <a class="navbar-item" href="/favorites">Favoris</a>
+
+        <a class="navbar-item" if={!state.loggedIn} href="/login">Connexion</a>
+        <a class="navbar-item" if={!state.loggedIn} href="/register">Inscription</a>
+
+        <div class="navbar-item" if={state.loggedIn}>
+          <span class="mr-2">
+            { state.username } <i class="fas fa-user"></i>
+          </span>
+          <span class="mr-4">
+            <i class="fas fa-star"></i> { state.favoriteCount }
+          </span>
+          <button class="button is-small is-danger" onclick={ logout }>
+            <i class="fas fa-sign-out-alt"></i> &nbsp; Déconnexion
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    export default {
+      state: {
+        loggedIn: localStorage.getItem("isLoggedIn") === "true",
+        username: localStorage.getItem("user_pseudo") || "Invité",
+        favoriteCount: 0
+      },
+
+      async onMounted() {
+        // Exposer pour usage externe
+        window.updateFavoriteCount = this.loadFavorites;
+        this.loadFavorites();
+      },
+
+      async loadFavorites() {
+        if (this.state.loggedIn && window.getFavorites) {
+          try {
+            const favorites = await window.getFavorites();
+            this.state.favoriteCount = favorites.length;
+            this.update();
+          } catch (e) {
+            console.warn("Erreur récupération favoris :", e);
+          }
+        }
+      },
+
+      burgerActive: false,
+
+      toggleBurger() {
+        this.burgerActive = !this.burgerActive;
+      },
+
+      handleSearch(e) {
+        e.preventDefault();
+        const form = e.target;
+        const query = form.searchQuery.value.trim();
+        const type = form.searchType.value;
+        if (!query) return;
+
+        window.latestSearch = { query, type };
+        window.history.pushState(null, "", "/search");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      },
+
+      logout() {
+        localStorage.clear();
+        this.state.loggedIn = false;
+        this.state.username = "Invité";
+        this.state.favoriteCount = 0;
+        this.update();
+
+        alert("Déconnexion réussie");
+        window.history.pushState(null, "", "/");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      }
+    }
+  </script>
+
+  <style scoped>
+    .navbar-burger {
+      cursor: pointer;
+    }
+  </style>
+</nav-menu>

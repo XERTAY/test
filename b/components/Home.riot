@@ -1,0 +1,70 @@
+<Home>
+  <section class="section">
+    <div class="container">
+      <ItemList 
+        title={"Home - Bienvenue " + state.username + " !"}
+        results={state.results} 
+        nb_res={state.pagination.items}
+      />
+
+      <nav class="pagination is-centered mt-5" role="navigation" aria-label="pagination" if={state.pagination.pages > 1}>
+        <a class="pagination-previous" onclick={ prevPage } disabled={state.currentPage === 1}>Précédent</a>
+        <a class="pagination-next" onclick={ nextPage } disabled={state.currentPage === state.pagination.pages}>Suivant</a>
+
+        <ul class="pagination-list">
+          <li each={n in pages()}>
+            <a class={ "pagination-link " + (n === state.currentPage ? "is-current" : "") } onclick={() => goToPage(n)}>{ n }</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <script>
+    export default {
+      state: {
+        username: localStorage.getItem("user_pseudo") || "Invité",
+        results: [],
+        pagination: {},
+        currentPage: 1
+      },
+
+      onMounted() {
+        this.loadPage(this.state.currentPage)
+      },
+
+      pages() {
+        const total = this.state.pagination.pages || 1
+        return Array.from({ length: total }, (_, i) => i + 1)
+      },
+
+      async loadPage(page) {
+        try {
+          const data = await window.dernierTitre(page)
+          this.state.results = data.results || []
+          this.state.pagination = data.pagination || {}
+          this.state.currentPage = page
+          this.update()
+        } catch (e) {
+          console.error("Erreur chargement page :", e)
+        }
+      },
+
+      nextPage() {
+        if (this.state.currentPage < this.state.pagination.pages) {
+          this.loadPage(this.state.currentPage + 1)
+        }
+      },
+
+      prevPage() {
+        if (this.state.currentPage > 1) {
+          this.loadPage(this.state.currentPage - 1)
+        }
+      },
+
+      goToPage(page) {
+        this.loadPage(page)
+      }
+    }
+  </script>
+</Home>

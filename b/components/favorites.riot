@@ -1,0 +1,75 @@
+<favorites>
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-4">Vos favoris</h2>
+
+      <div if={!state.isLoggedIn}>
+        <p class="has-text-grey">Veuillez vous connecter pour accéder à vos favoris.</p>
+      </div>
+
+      <div if={state.isLoggedIn && state.favorites.length === 0}>
+        <p class="has-text-grey">Aucun favori pour le moment.</p>
+      </div>
+
+      <div if={state.isLoggedIn && state.favorites.length > 0} class="columns is-multiline">
+        <div class="column is-one-quarter" each={fav in state.favorites}>
+          <div class="card">
+            <div class="card-image">
+              <figure class="image is-4by3">
+                <img src={fav.item_img || 'https://via.placeholder.com/150'} alt="Cover" />
+              </figure>
+            </div>
+            <div class="card-content">
+              <p class="title is-6">{fav.item_title}</p>
+              <p class="subtitle is-7 has-text-grey">Type : {fav.item_type}</p>
+            </div>
+
+            <footer class="card-footer">
+              <a class="card-footer-item" onclick={() => remove(fav)}>
+                <i class="fas fa-trash"></i>&nbsp; Supprimer
+              </a>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    export default {
+      state: {
+        isLoggedIn: localStorage.getItem("isLoggedIn") === "true",
+        favorites: []
+      },
+
+      async onMounted() {
+        if (this.state.isLoggedIn && window.getFavorites) {
+          this.loadFavorites();
+        }
+      },
+
+      async loadFavorites() {
+        try {
+          this.state.favorites = await window.getFavorites();
+          this.update();
+
+          if (window.updateFavoriteCount) {
+            window.updateFavoriteCount();
+          }
+        } catch (e) {
+          console.warn("Erreur chargement favoris :", e);
+        }
+      },
+
+      async remove(fav) {
+        if (!confirm("Retirer ce favori ?")) return;
+
+        if (window.removeFavorite) {
+          await window.removeFavorite(fav.id);
+        }
+
+        await this.loadFavorites();
+      }
+    }
+  </script>
+</favorites>
